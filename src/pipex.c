@@ -6,12 +6,13 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:08:08 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/23 18:56:28 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/24 00:27:04 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 #include <fcntl.h>
+#include <stdio.h>
 #include <unistd.h>
 
 char	*get_file_content(char *file)
@@ -59,16 +60,51 @@ char	*get_stdin(char *keyword)
 	return (buffer);
 }
 
+void	free_all(char **commands)
+{
+	int	i;
+
+	i = 0;
+	while (commands[i])
+		free(commands[i++]);
+	free(commands);
+}
+
 char	*command_processing(char **argv, int start, int end, char **buffer)
 {
-	int	pid;
+	int		pipefd[2];
+	int		pid;
+	char	**command;
+	char	*path;
 
 	while (start < end)
 	{
+		command = ft_split(argv[start], ' ');
+		path = ft_strjoin("/bin/", command[0]);
+		if (pipe(pipefd) == -1)
+		{
+			perror("pipe");
+			exit(1);
+		}
 		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(1);
+		}
 		if (pid == 0)
-			execve(, char *const *argv, char *const *envp)
-
+		{
+			close(pipefd[0]);
+			if (execve(path, command, NULL) < 0)
+			{
+				perror("execve failed");
+				exit(1);
+			}
+		}
+		get
+		free_all(command);
+		free(path);
+		start++;
 	}
 }
 
