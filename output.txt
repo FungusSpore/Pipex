@@ -1,0 +1,21 @@
+      3       3      18
+
+includes
+libft
+output.txt
+pipex
+src
+test.c
+test.txt
+test2.c
+Makefile
+README.md
+a.out
+includes
+libft
+output.txt
+pipex
+src
+test.c
+test.txt
+test2.c

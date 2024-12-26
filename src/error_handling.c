@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 17:31:13 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/23 17:49:35 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/26 20:18:03 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ static int	check_file(char *file)
 int	check_input(int argc, char **argv, int *append_mode)
 {
 	int	i;
-	int	fd1;
-	int	fd2;
 
 	i = 1;
 	*append_mode = 0;
