@@ -6,17 +6,31 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 17:31:13 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/26 20:18:03 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/27 00:33:47 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <fcntl.h>
 
 static int	check_file(char *file)
 {
 	int	fd;
 
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		perror("open failed");
+		return (1);
+	}
+	return (0);
+}
+
+static int	check_create_file(char *file)
+{
+	int	fd;
+
+	fd = open(file, O_RDONLY | O_CREAT, 0666);
 	if (fd < 0)
 	{
 		perror("open failed");
@@ -39,11 +53,11 @@ int	check_input(int argc, char **argv, int *append_mode)
 	if (!ft_strncmp(argv[i], "here_doc", -1))
 	{
 		*append_mode = 1;
-		if (check_file(argv[argc - 1]))
+		if (check_create_file(argv[argc - 1]))
 			return (1);
 		return (0);
 	}
-	if (check_file(argv[i]) || check_file(argv[argc - 1]))
+	if (check_file(argv[i]) || check_create_file(argv[argc - 1]))
 		return (1);
 	return (0);
 }
