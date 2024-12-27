@@ -1,7 +1,7 @@
 NAME=pipex
 DIR_LIBFT=libft
 LIBFT=$(DIR_LIBFT)/libft.a
-SOURCE= src/pipex_rework.c src/error_handling.c src/pipex_utils.c
+SOURCE= src/pipex_rework.c src/error_handling.c src/pipex_utils.c src/input_handling.c src/output_handling.c
 OBJ=$(SOURCE:.c=.o)
 FLAGS= -Wall -Wextra -Werror
 CC= cc
