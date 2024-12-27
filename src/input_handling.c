@@ -6,11 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:04:46 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 17:52:37 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:00:56 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <stdio.h>
 
 int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 {
@@ -23,7 +24,8 @@ int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 		perror("open");
 		return (1);
 	}
-	create_child_process(pipefds, argv, pipe_count, arg_count);
+	if (create_child_process(pipefds, argv, pipe_count, arg_count))
+		return (1);
 	close(pipefds[*pipe_count][0]);
 	line = get_next_line(fd);
 	while (line)
@@ -68,7 +70,8 @@ int	heredoc_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 	char	*line;
 
 	line = get_stdin(argv[(*arg_count)++]);
-	create_child_process(pipefds, argv, pipe_count, arg_count);
+	if (create_child_process(pipefds, argv, pipe_count, arg_count))
+		return (1);
 	close(pipefds[*pipe_count][0]);
 	ft_putstr_fd(line, pipefds[*pipe_count][1]);
 	close(pipefds[*pipe_count][1]);

@@ -6,11 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 17:52:04 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:01:48 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <stdio.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -57,7 +58,11 @@ int *pipe_count, int *arg_count)
 		close(pipefds[*pipe_count][1]);
 		close(pipefds[*pipe_count + 1][0]);
 		close(pipefds[*pipe_count + 1][1]);
-		execve(path, cmd, NULL);
+		if (execve(path, cmd, NULL) == -1)
+		{
+			perror("child process");
+			return (1);
+		}
 	}
 	free_all((void **)cmd);
 	free(path);
