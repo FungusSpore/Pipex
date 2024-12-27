@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 17:31:13 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 18:10:39 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/27 23:08:23 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	check_file(char *file)
 static int	check_create_file(char *file)
 {
 	int	fd;
-	
+
 	fd = open(file, O_RDONLY | O_CREAT, 0666);
 	if (fd < 0)
 	{

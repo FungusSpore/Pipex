@@ -6,12 +6,13 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 19:01:48 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/27 21:50:25 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -38,6 +39,21 @@ int	**make_pipes(int argc, int append_mode)
 	return (pipefd);
 }
 
+void	cmd_processing(char **cmd)
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	while (cmd[i])
+	{
+		line = ft_strtrim(cmd[i], "\'\"");
+		free(cmd[i]);
+		cmd[i] = line;
+		i++;
+	}
+}
+
 int	create_child_process(int **pipefds, char **argv, \
 int *pipe_count, int *arg_count)
 {
@@ -46,6 +62,7 @@ int *pipe_count, int *arg_count)
 	int		pid;
 
 	cmd = ft_split_ignore_qoutes(argv[*arg_count], ' ');
+	cmd_processing(cmd);
 	path = ft_strjoin("/bin/", cmd[0]);
 	pid = fork();
 	if (pid == -1)
@@ -59,10 +76,7 @@ int *pipe_count, int *arg_count)
 		close(pipefds[*pipe_count + 1][0]);
 		close(pipefds[*pipe_count + 1][1]);
 		if (execve(path, cmd, NULL) == -1)
-		{
-			perror("child process");
 			return (1);
-		}
 	}
 	free_all((void **)cmd);
 	free(path);
