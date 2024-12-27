@@ -6,13 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 21:50:25 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/28 01:52:53 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -39,6 +37,42 @@ int	**make_pipes(int argc, int append_mode)
 	return (pipefd);
 }
 
+static int	is_set(char c, char const *set)
+{
+	while (*set)
+	{
+		if (c == *set)
+			return (1);
+		set++;
+	}
+	return (0);
+}
+
+static char	*ft_strtrim_modified(char const *s1, char const *set)
+{
+	int		start;
+	int		end;
+	char	*ptr;
+
+	if (!s1 | !set)
+		return (NULL);
+	start = 0;
+	end = ft_strlen(s1) - 1;
+	if (start >= end && end >= 0)
+		return (NULL);
+	if (is_set(s1[start], set))
+		start++;
+	if (is_set(s1[end], set))
+		end--;
+	if (start > end)
+		return (ft_strdup(""));
+	ptr = malloc(sizeof(char) * (end - start + 2));
+	if (!ptr)
+		return (NULL);
+	ft_strlcpy(ptr, s1 + start, end - start + 2);
+	return (ptr);
+}
+
 void	cmd_processing(char **cmd)
 {
 	int		i;
@@ -47,7 +81,7 @@ void	cmd_processing(char **cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		line = ft_strtrim(cmd[i], "\'\"");
+		line = ft_strtrim_modified(cmd[i], "\'\"");
 		free(cmd[i]);
 		cmd[i] = line;
 		i++;
