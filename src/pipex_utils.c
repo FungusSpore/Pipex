@@ -6,11 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/28 01:52:53 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:08:05 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <stdio.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -82,9 +83,12 @@ void	cmd_processing(char **cmd)
 	while (cmd[i])
 	{
 		line = ft_strtrim_modified(cmd[i], "\'\"");
-		free(cmd[i]);
-		cmd[i] = line;
-		i++;
+		if (line)
+		{
+			free(cmd[i]);
+			cmd[i] = line;
+		}
+			i++;
 	}
 }
 

@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 17:31:13 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/28 01:54:24 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/29 02:56:51 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <stdio.h>
 
 static int	check_file(char *file)
 {
@@ -45,7 +44,7 @@ int	check_input(int argc, char **argv, int *append_mode)
 
 	i = 1;
 	*append_mode = 0;
-	if (argc < 4)
+	if (argc < 5)
 	{
 		ft_printf("Invalid: ./pipex <file1> <command1> ... <comandn> <file2>\n");
 		return (1);

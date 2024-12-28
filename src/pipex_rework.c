@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 13:26:24 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 23:07:10 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:40:55 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int argc, char **argv)
 	int	vars[4];
 
 	vars[3] = 0;
-	if (check_input(argc, argv, &vars[0]) != 0)
+	if (check_input(argc, argv, &vars[0]))
 		return (1);
 	vars[1] = 0;
 	vars[2] = 1 + vars[0];
