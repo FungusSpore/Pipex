@@ -6,11 +6,13 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 13:26:24 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/28 21:40:55 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 02:23:10 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <stdlib.h>
+#include <sys/wait.h>
 
 static int	loop_cmd(int **pipefds, char **argv, \
 										int *arg_count, int *pipe_count)

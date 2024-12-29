@@ -1,8 +1,10 @@
 42_pipex_tester
 Makefile
+a.out
 includes
 infile
 libft
 outfile
 pipex
 src
+test.c

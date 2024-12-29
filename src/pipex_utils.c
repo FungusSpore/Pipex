@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/28 21:08:05 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 01:21:23 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <stdio.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -100,6 +99,11 @@ int *pipe_count, int *arg_count)
 	int		pid;
 
 	cmd = ft_split_ignore_qoutes(argv[*arg_count], ' ');
+	if (!*cmd)
+	{
+		free(cmd);
+		return (1);
+	}
 	cmd_processing(cmd);
 	path = ft_strjoin("/bin/", cmd[0]);
 	pid = fork();

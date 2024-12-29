@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:04:46 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 19:00:56 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 01:36:01 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 	while (line)
 	{
 		ft_putstr_fd(line, pipefds[*pipe_count][1]);
+		free(line);
 		line = get_next_line(fd);
 	}
+	free(line);
 	close(pipefds[*pipe_count][1]);
 	close(fd);
 	(*pipe_count)++;

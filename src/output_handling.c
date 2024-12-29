@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:39:55 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 23:07:59 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 01:47:53 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	cmd_to_output(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 	(*pipe_count)++;
 	(*arg_count)++;
 	close(pipefds[*pipe_count][1]);
-	fd = open(argv[*arg_count], O_WRONLY);
+	fd = open(argv[*arg_count], O_WRONLY | O_TRUNC);
 	if (fd < 0)
 	{
 		perror("open cmd_to_output");

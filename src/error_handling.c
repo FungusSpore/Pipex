@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 17:31:13 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/29 02:56:51 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 01:52:54 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ static int	check_file(char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-	{
 		perror("open input failed");
-		return (1);
-	}
 	return (0);
 }
 
