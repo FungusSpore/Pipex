@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:39:55 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/30 16:07:27 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:06:38 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <fcntl.h>
 
 int	cmd_to_output(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 {
@@ -25,7 +24,7 @@ int	cmd_to_output(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 	(*pipe_count)++;
 	(*arg_count)++;
 	close(pipefds[*pipe_count][1]);
-	fd = open(argv[*arg_count], O_WRONLY | O_TRUNC | O_CREAT);
+	fd = open(argv[*arg_count], O_WRONLY | O_TRUNC | O_CREAT, 0666);
 	if (fd < 0)
 	{
 		perror("open cmd_to_output");
@@ -55,7 +54,7 @@ int *arg_count, int *pipe_count)
 	(*pipe_count)++;
 	(*arg_count)++;
 	close(pipefds[*pipe_count][1]);
-	fd = open(argv[*arg_count], O_WRONLY | O_APPEND | O_CREAT);
+	fd = open(argv[*arg_count], O_WRONLY | O_APPEND | O_CREAT, 0666);
 	if (fd < 0)
 	{
 		perror("open: append_to_output");

@@ -6,11 +6,14 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/30 16:20:41 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:58:18 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -90,11 +93,51 @@ int	call_process(int **pipefds, int *pipe_count, char *path, char **cmd)
 	close(pipefds[*pipe_count + 1][1]);
 	if (execve(path, cmd, NULL) == -1)
 	{
+		// perror("execve");
 		free_all((void **)cmd);
 		free(path);
 		return (1);
 	}
 	return (0);
+}
+
+char	*path_checking(char **cmd)
+{
+	int		pid;
+	int		status;
+	char	*path;
+
+	path = ft_strdup(cmd[0]);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return (NULL);
+	}
+	if (pid == 0)
+	{
+		if (execve(path, cmd, NULL) == -1)
+		{
+			free(path);
+			path = ft_strjoin("/bin/", cmd[0]);
+		}
+		if (execve(path, cmd, NULL) == -1)
+			exit(1);
+	}
+	else
+	{
+		waitpid(0, &status, 0);
+		if (WIFEXITED(status))
+		{
+			printf("%d\n", WEXITSTATUS(status));
+			if (WEXITSTATUS(status))
+			{
+				perror("execve");
+				return (NULL);
+			}
+		}
+	}
+	return (path);
 }
 
 int	create_child_process(int **pipefds, char **argv, \
@@ -111,7 +154,9 @@ int *pipe_count, int *arg_count)
 		return (1);
 	}
 	cmd_processing(cmd);
-	path = ft_strjoin("/bin/", cmd[0]);
+	path = path_checking(cmd);
+	if (!path)
+		return (1);
 	pid = fork();
 	if (pid == -1)
 		return (1);
