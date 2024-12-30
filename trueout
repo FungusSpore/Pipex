@@ -1,0 +1,15 @@
+total 68$
+drwxr-xr-x  7 jianwong 2024_kuala-lumpur  4096 dM-CM-)c.  30 14:04 .$
+drwxr-xr-x 11 jianwong 2024_kuala-lumpur   159 dM-CM-)c.  23 14:02 ..$
+drwxr-xr-x  5 jianwong 2024_kuala-lumpur   163 dM-CM-)c.  30 13:59 42_pipex_tester$
+drwxr-xr-x  8 jianwong 2024_kuala-lumpur  4096 dM-CM-)c.  30 13:55 .git$
+drwxr-xr-x  2 jianwong 2024_kuala-lumpur    21 dM-CM-)c.  27 17:54 includes$
+-rw-r--r--  1 jianwong 2024_kuala-lumpur    14 dM-CM-)c.  30 13:52 infile$
+drwxr-xr-x  2 jianwong 2024_kuala-lumpur  4096 dM-CM-)c.  30 13:56 libft$
+-rw-r--r--  1 jianwong 2024_kuala-lumpur   541 dM-CM-)c.  27 14:06 Makefile$
+-rw-r--r--  1 jianwong 2024_kuala-lumpur   961 dM-CM-)c.  30 14:04 outfile$
+-rw-r--r--  1 jianwong 2024_kuala-lumpur     0 dM-CM-)c.  30 13:52 output$
+-rwxr-xr-x  1 jianwong 2024_kuala-lumpur 32064 dM-CM-)c.  30 14:04 pipex$
+drwxr-xr-x  2 jianwong 2024_kuala-lumpur  4096 dM-CM-)c.  30 14:04 src$
+-rw-r--r--  1 jianwong 2024_kuala-lumpur   194 dM-CM-)c.  30 13:52 test.c$
+-rw-r--r--  1 jianwong 2024_kuala-lumpur     0 dM-CM-)c.  30 14:04 trueout$
