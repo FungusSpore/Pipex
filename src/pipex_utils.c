@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/30 15:27:40 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:20:41 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,6 @@ int	**make_pipes(int argc, int append_mode)
 	return (pipefd);
 }
 
-static int	is_set(char c, char const *set)
-{
-	while (*set)
-	{
-		if (c == *set)
-			return (1);
-		set++;
-	}
-	return (0);
-}
-
 static char	*ft_strtrim_modified(char const *s1, char const *set)
 {
 	int		start;
@@ -60,9 +49,9 @@ static char	*ft_strtrim_modified(char const *s1, char const *set)
 	end = ft_strlen(s1) - 1;
 	if (start >= end && end >= 0)
 		return (NULL);
-	if (is_set(s1[start], set))
+	if (ft_strchr(set, s1[start]))
 		start++;
-	if (is_set(s1[end], set))
+	if (ft_strchr(set, s1[end]))
 		end--;
 	if (start > end)
 		return (ft_strdup(""));
@@ -87,8 +76,25 @@ void	cmd_processing(char **cmd)
 			free(cmd[i]);
 			cmd[i] = line;
 		}
-			i++;
+		i++;
 	}
+}
+
+int	call_process(int **pipefds, int *pipe_count, char *path, char **cmd)
+{
+	dup2(pipefds[*pipe_count][0], STDIN_FILENO);
+	dup2(pipefds[*pipe_count + 1][1], STDOUT_FILENO);
+	close(pipefds[*pipe_count][0]);
+	close(pipefds[*pipe_count][1]);
+	close(pipefds[*pipe_count + 1][0]);
+	close(pipefds[*pipe_count + 1][1]);
+	if (execve(path, cmd, NULL) == -1)
+	{
+		free_all((void **)cmd);
+		free(path);
+		return (1);
+	}
+	return (0);
 }
 
 int	create_child_process(int **pipefds, char **argv, \
@@ -110,16 +116,8 @@ int *pipe_count, int *arg_count)
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
-	{
-		dup2(pipefds[*pipe_count][0], STDIN_FILENO);
-		dup2(pipefds[*pipe_count + 1][1], STDOUT_FILENO);
-		close(pipefds[*pipe_count][0]);
-		close(pipefds[*pipe_count][1]);
-		close(pipefds[*pipe_count + 1][0]);
-		close(pipefds[*pipe_count + 1][1]);
-		if (execve(path, cmd, NULL) == -1)
+		if (call_process(pipefds, pipe_count, path, cmd))
 			return (1);
-	}
 	free_all((void **)cmd);
 	free(path);
 	return (0);

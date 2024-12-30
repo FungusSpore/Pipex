@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:04:46 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/30 15:29:36 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:46:38 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <stdio.h>
 
 int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 {

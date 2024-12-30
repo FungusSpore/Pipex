@@ -1,18 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_rework.c                                     :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 13:26:24 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/30 02:23:10 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:11:29 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <stdlib.h>
-#include <sys/wait.h>
+
+int	check_input(int argc, char **argv, int *append_mode)
+{
+	int	i;
+
+	i = 1;
+	*append_mode = 0;
+	if (argc < 5)
+	{
+		ft_printf("Invalid: ./pipex <file1> <command1> ... <comandn> <file2>\n");
+		return (1);
+	}
+	if (!ft_strncmp(argv[i], "here_doc", -1))
+		*append_mode = 1;
+	return (0);
+}
 
 static int	loop_cmd(int **pipefds, char **argv, \
 										int *arg_count, int *pipe_count)
@@ -39,6 +53,26 @@ static int	loop_cmd(int **pipefds, char **argv, \
 	vars[2] = arg_count
 	vars[3] = error
 */
+
+int	kill_child(void)
+{
+	pid_t	w;
+	int		status;
+
+	while (1)
+	{
+		w = wait(&status);
+		if (w == -1)
+			break ;
+		if (WIFEXITED(status))
+		{
+			if (WEXITSTATUS(status))
+				return (WEXITSTATUS(status));
+		}
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	int	**pipefds;
@@ -61,6 +95,7 @@ int	main(int argc, char **argv)
 	else if (!vars[3])
 		vars[3] += cmd_to_output(pipefds, argv, &vars[2], &vars[1]);
 	free_all((void **)pipefds);
+	vars[3] += kill_child();
 	if (vars[3])
 		return (1);
 	return (0);
