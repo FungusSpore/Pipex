@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:04:46 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/30 18:46:52 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:37:39 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 {
 	int		fd;
+	int		error;
 	char	*line;
 
 	fd = open(argv[(*arg_count)++], O_RDONLY);
 	if (fd < 0)
 		perror("open");
-	if (create_child_process(pipefds, argv, pipe_count, arg_count))
-		return (1);
+	error = create_child_process(pipefds, argv, pipe_count, arg_count);
 	close(pipefds[*pipe_count][0]);
 	line = get_next_line(fd);
 	while (line)
@@ -35,6 +35,8 @@ int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 	close(fd);
 	(*pipe_count)++;
 	(*arg_count)++;
+	if (error)
+		return (1);
 	return (0);
 }
 
@@ -49,8 +51,8 @@ static char	*get_stdin(char *keyword)
 		return (NULL);
 	ft_printf("heredoc> ");
 	line = get_next_line(0);
-	while (ft_strncmp(line, keyword, ft_strlen(keyword)) \
-		|| line[ft_strlen(keyword)] != '\n')
+	while (line && (ft_strncmp(line, keyword, ft_strlen(keyword)) \
+		|| line[ft_strlen(keyword)] != '\n'))
 	{
 		temp = ft_strjoin(buffer, line);
 		free(buffer);

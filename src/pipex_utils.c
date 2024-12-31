@@ -6,14 +6,13 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/30 18:58:18 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:07:20 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -85,6 +84,9 @@ void	cmd_processing(char **cmd)
 
 int	call_process(int **pipefds, int *pipe_count, char *path, char **cmd)
 {
+	char	*mod_path;
+
+	mod_path = NULL;
 	dup2(pipefds[*pipe_count][0], STDIN_FILENO);
 	dup2(pipefds[*pipe_count + 1][1], STDOUT_FILENO);
 	close(pipefds[*pipe_count][0]);
@@ -93,57 +95,17 @@ int	call_process(int **pipefds, int *pipe_count, char *path, char **cmd)
 	close(pipefds[*pipe_count + 1][1]);
 	if (execve(path, cmd, NULL) == -1)
 	{
-		// perror("execve");
-		free_all((void **)cmd);
-		free(path);
+		mod_path = ft_strjoin("/bin/", path);
+		if (execve(mod_path, cmd, NULL) == -1)
+			perror("execve");
 		return (1);
 	}
 	return (0);
 }
 
-char	*path_checking(char **cmd)
-{
-	int		pid;
-	int		status;
-	char	*path;
-
-	path = ft_strdup(cmd[0]);
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		return (NULL);
-	}
-	if (pid == 0)
-	{
-		if (execve(path, cmd, NULL) == -1)
-		{
-			free(path);
-			path = ft_strjoin("/bin/", cmd[0]);
-		}
-		if (execve(path, cmd, NULL) == -1)
-			exit(1);
-	}
-	else
-	{
-		waitpid(0, &status, 0);
-		if (WIFEXITED(status))
-		{
-			printf("%d\n", WEXITSTATUS(status));
-			if (WEXITSTATUS(status))
-			{
-				perror("execve");
-				return (NULL);
-			}
-		}
-	}
-	return (path);
-}
-
 int	create_child_process(int **pipefds, char **argv, \
 int *pipe_count, int *arg_count)
 {
-	char	*path;
 	char	**cmd;
 	int		pid;
 
@@ -154,16 +116,12 @@ int *pipe_count, int *arg_count)
 		return (1);
 	}
 	cmd_processing(cmd);
-	path = path_checking(cmd);
-	if (!path)
-		return (1);
 	pid = fork();
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
-		if (call_process(pipefds, pipe_count, path, cmd))
+		if (call_process(pipefds, pipe_count, cmd[0], cmd))
 			return (1);
 	free_all((void **)cmd);
-	free(path);
 	return (0);
 }

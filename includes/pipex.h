@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:08:19 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/27 17:54:14 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/31 14:56:58 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <stdio.h>
+
+# define APD_MODE 0
+# define PIPE_IDX 1
+# define ARG_IDX 2
+# define ERROR 3
 
 int		check_input(int argc, char **argv, int *append_mode);
 
