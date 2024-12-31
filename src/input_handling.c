@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:04:46 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/31 16:37:39 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:12:05 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,12 @@
 int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 {
 	int		fd;
-	int		error;
 	char	*line;
 
 	fd = open(argv[(*arg_count)++], O_RDONLY);
 	if (fd < 0)
 		perror("open");
-	error = create_child_process(pipefds, argv, pipe_count, arg_count);
-	close(pipefds[*pipe_count][0]);
+	create_child_process(pipefds, argv, pipe_count, arg_count);
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -31,12 +29,11 @@ int	input_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 		line = get_next_line(fd);
 	}
 	free(line);
+	close(pipefds[*pipe_count][0]);
 	close(pipefds[*pipe_count][1]);
 	close(fd);
 	(*pipe_count)++;
 	(*arg_count)++;
-	if (error)
-		return (1);
 	return (0);
 }
 
@@ -70,10 +67,9 @@ int	heredoc_to_cmd(int **pipefds, char **argv, int *arg_count, int *pipe_count)
 	char	*line;
 
 	line = get_stdin(argv[(*arg_count)++]);
-	if (create_child_process(pipefds, argv, pipe_count, arg_count))
-		return (1);
-	close(pipefds[*pipe_count][0]);
+	create_child_process(pipefds, argv, pipe_count, arg_count);
 	ft_putstr_fd(line, pipefds[*pipe_count][1]);
+	close(pipefds[*pipe_count][0]);
 	close(pipefds[*pipe_count][1]);
 	free(line);
 	(*pipe_count)++;

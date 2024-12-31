@@ -6,13 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 00:14:26 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/31 16:07:20 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:12:38 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int	**make_pipes(int argc, int append_mode)
 {
@@ -98,6 +96,8 @@ int	call_process(int **pipefds, int *pipe_count, char *path, char **cmd)
 		mod_path = ft_strjoin("/bin/", path);
 		if (execve(mod_path, cmd, NULL) == -1)
 			perror("execve");
+		free(mod_path);
+		free_all((void **)cmd);
 		return (1);
 	}
 	return (0);
@@ -121,7 +121,7 @@ int *pipe_count, int *arg_count)
 		return (1);
 	if (pid == 0)
 		if (call_process(pipefds, pipe_count, cmd[0], cmd))
-			return (1);
+			exit(1);
 	free_all((void **)cmd);
 	return (0);
 }

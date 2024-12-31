@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 13:26:24 by jianwong          #+#    #+#             */
-/*   Updated: 2024/12/31 16:31:17 by jianwong         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:08:44 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ static int	loop_cmd(int **pipefds, char **argv, \
 		end++;
 	while (*pipe_count < end - 2)
 	{
-		if (create_child_process(pipefds, argv, pipe_count, arg_count))
-			return (1);
+		create_child_process(pipefds, argv, pipe_count, arg_count);
 		close(pipefds[*pipe_count][0]);
 		close(pipefds[*pipe_count][1]);
 		(*pipe_count)++;
@@ -60,7 +59,7 @@ int	kill_child(void)
 			break ;
 		if (WIFEXITED(status))
 		{
-			if (WEXITSTATUS(status))
+			if (WEXITSTATUS(status) != 0)
 				return (WEXITSTATUS(status));
 		}
 	}
@@ -79,18 +78,19 @@ int	main(int argc, char **argv)
 	vars[ARG_IDX] = 1 + vars[APD_MODE];
 	pipefds = make_pipes(argc, vars[APD_MODE]);
 	if (vars[APD_MODE])
-		vars[ERROR] += heredoc_to_cmd(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
-	else if (!vars[ERROR])
-		vars[ERROR] += input_to_cmd(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
-	if (((argc > 5 && !vars[APD_MODE]) || (argc > 6 && vars[APD_MODE])) && !vars[ERROR])
-		vars[ERROR] += loop_cmd(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
+		heredoc_to_cmd(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
+	else
+		input_to_cmd(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
+	if (((argc > 5 && !vars[APD_MODE]) || (argc > 6 && vars[APD_MODE])))
+		loop_cmd(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
 	if (vars[APD_MODE] && !vars[ERROR])
-		vars[ERROR] += append_to_output(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
+		vars[ERROR] = append_to_output(pipefds, \
+		argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
 	else if (!vars[ERROR])
-		vars[ERROR] += cmd_to_output(pipefds, argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
+		vars[ERROR] = cmd_to_output(pipefds, \
+		argv, &vars[ARG_IDX], &vars[PIPE_IDX]);
 	free_all((void **)pipefds);
-	vars[ERROR] += kill_child();
-	if (vars[ERROR])
+	if (kill_child() || vars[ERROR])
 		return (1);
 	return (0);
 }
